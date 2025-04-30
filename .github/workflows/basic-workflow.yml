@@ -29,8 +29,8 @@ on:
           required: true
           type: boolean
 
-  # Workflows made up of one or more jobs.
-  jobs:
+# Workflows made up of one or more jobs.
+jobs:
     # This workflow has one job called greet
     greet:
       # Displays name for job
