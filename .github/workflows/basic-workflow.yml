@@ -47,4 +47,4 @@ jobs:
           run: |
             echo "Hello ${{ github.event.inputs.name }}"
             echo "Your favourite city is ${{ github.event.inputs.city }}"
-            echo "Is your favourite colour blue: ${{ github.event.inputs.name }}"
+            echo "Is your favourite colour blue: ${{ github.event.inputs.fav-colour-blue }}"
