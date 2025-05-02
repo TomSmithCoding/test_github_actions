@@ -23,10 +23,10 @@ jobs:
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
 
-      # - name: Install dependencies
-      #   run: |
-      #     python -m pip install --upgrade pip
-      #     pip install any dependencies you need here, can use requirements.txt or just name packages
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
 
       - name: Run pytest
         uses: pavelzw/pytest-action@v2
