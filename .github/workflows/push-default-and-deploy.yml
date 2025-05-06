@@ -51,8 +51,8 @@ jobs:
     deploy-mock-dev:
         runs-on: ubuntu-latest
         needs: build-and-test
-        #environment: dev
-            #name: DEV
+        environment:
+            name: DEV
             #url: https://dev.example.com
 
         steps:
@@ -78,8 +78,8 @@ jobs:
     deploy-mock-staging:
         runs-on: ubuntu-latest
         needs: build-and-test
-        #environment: staging
-            #name: STAGING
+        environment:
+            name: STAGING
             #url: https://staging.example.com
 
         steps:
@@ -108,8 +108,8 @@ jobs:
         needs: 
             - deploy-mock-dev
             - deploy-mock-staging
-        #environment: prod
-            #name: PROD
+        environment:
+            name: PROD
             #url: https://prod.example.com
 
         steps:
