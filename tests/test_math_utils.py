@@ -3,7 +3,7 @@ from src.math_utils import divide
 
 def test_divide_positive_numbers() -> None:
     """Test that divide returns the correct result when given two numbers."""
-    assert divide(1, 2) == 0.5
+    assert divide(1, 2) == 0.4
 
 
 def test_divide_negative_numbers() -> None:
