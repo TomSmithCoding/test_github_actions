@@ -1,0 +1,129 @@
+name: Push Default and Deploy
+
+on:
+    push:
+        branches:
+        - main
+    workflow_dispatch:
+
+permissions:
+    id-token: write
+    contents: read
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.x"
+            
+            - name: Display Python version
+              run: python -c "import sys; print(sys.version)"
+
+            - name: Install dependencies
+              run: |
+                    python -m pip install --upgrade pip
+                    pip install -r requirements.txt
+
+            - name: Test with pytest
+              run: |
+                    pip install pytest pytest-cov
+                    pytest tests.py --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+            
+            - name: Upload build artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: pythonproject-build
+                  path: pythonproject/**
+                  if-no-files-found: error
+    
+    deploy-mock-dev:
+        runs-on: ubuntu-latest
+        needs: build-and-test
+        #environment: dev
+            #name: DEV
+            #url: https://dev.example.com
+
+        steps:
+            - name: Download build artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  name: pythonproject-build
+                  path: pythonproject-build
+
+            - name: Prove files are there
+              run: |
+                        echo "Files in the build directory:"
+                        ls -la
+                        ls -la pythonproject-build
+
+            - name: Deploy to mock dev 
+              run: |
+                    echo "Deploying to mock server..."
+                    # Add your deployment commands here
+                    # For example, you can use scp or rsync to copy files to the server
+                    # scp -r pythonproject-build/* user@mockserver:/path/to/deploy
+
+    deploy-mock-staging:
+        runs-on: ubuntu-latest
+        needs: build-and-test
+        #environment: staging
+            #name: STAGING
+            #url: https://staging.example.com
+
+        steps:
+            - name: Download build artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  name: pythonproject-build
+                  path: pythonproject-build
+
+            - name: Prove files are there
+              run: |
+                        echo "Files in the build directory:"
+                        ls -la
+                        ls -la pythonproject-build
+
+            - name: Deploy to mock staging
+              run: |
+                    echo "Deploying to mock server..."
+                    # Add your deployment commands here
+                    # Login to azure step followed by Deploy to azure step
+                    # For example, you can use scp or rsync to copy files to the server
+                    # scp -r pythonproject-build/* user@mockserver:/path/to/deploy
+                    
+    deploy-mock-production:
+        runs-on: ubuntu-latest
+        needs: 
+            - deploy-mock-dev
+            - deploy-mock-staging
+        #environment: prod
+            #name: PROD
+            #url: https://prod.example.com
+
+        steps:
+          - name: Download build artifacts
+            uses: actions/download-artifact@v4
+            with:
+                name: pythonproject-build
+                path: pythonproject-build
+
+          - name: Prove files are there
+            run: |
+                      echo "Files in the build directory:"
+                      ls -la
+                      ls -la pythonproject-build
+
+          - name: Deploy to mock production
+            run: |
+                    echo "Deploying to mock server..."
+                    # Add your deployment commands here
+                    # For example, you can use scp or rsync to copy files to the server
+                    # scp -r pythonproject-build/* user@mockserver:/path/to/deploy
+        
