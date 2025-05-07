@@ -1,10 +1,10 @@
 name: Push Default and Deploy
 
-on:
-    push:
-        branches:
-        - main
-    workflow_dispatch:
+on: workflow_dispatch
+    # push:
+    #     branches:
+    #     - main
+    # workflow_dispatch:
 
 permissions: # Permissions for OIDC
     id-token: write
