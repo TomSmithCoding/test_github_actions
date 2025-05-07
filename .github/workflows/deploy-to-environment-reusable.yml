@@ -1,0 +1,43 @@
+name: Deploy to environment
+
+on:
+    workflow_call:
+        inputs:
+            environment-name:
+                description: 'Name of the environment to deploy to (DEV, STAGING, PROD)'
+                required: true
+                type: string
+            artifact-name:
+                description: 'Name of the artifact to download'
+                required: true
+                type: string
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        environment:
+            name: ${{ inputs.environment-name }}
+            #url: https://example.com/${{ inputs.environment-url }}
+        
+        steps:
+            - name: Download build artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  name: ${{ inputs.artifact-name }} 
+                  path: pythonproject-build
+
+            - name: Prove files are there
+              run: |
+                        echo "Files in the build directory:"
+                        ls -la
+                        ls -la pythonproject-build
+
+            - name: Deploy to mock staging
+              run: |
+                    echo "Deploying to mock server..."
+                    # Add your deployment commands here
+                    # Login to azure step followed by Deploy to azure step
+                    # For example, you can use scp or rsync to copy files to the server
+                    # scp -r pythonproject-build/* user@mockserver:/path/to/deploy
+
+
+            
