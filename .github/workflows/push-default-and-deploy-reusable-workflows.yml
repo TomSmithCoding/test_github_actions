@@ -1,0 +1,56 @@
+name: Push Default and Deploy - Reusable Workflow
+
+on:
+    push:
+        branches:
+        - main
+    workflow_dispatch:
+
+permissions: # Permissions for OIDC
+    id-token: write
+    contents: read
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+
+        steps:
+
+          - name: Before composite action
+            run: echo "This is a step before the composite action."
+
+          - name: Build and Test Python Project
+            uses: TomSmithCoding/python-build-test-custom-action@main
+            with:
+              python-version: "3.x"
+              output-path: "src"
+              
+          - name: After composite action
+            run: echo "This is a step after the composite action."
+    
+    deploy-mock-dev:
+        needs: build-and-test
+        uses: TomSmithCoding/test_github_actions/.github/workflows/deploy-to-environment-reusable.yml@main
+        with:
+            environment-name: DEV
+            artifact-name: pythonproject-build
+        #secrets: inherit # Can specify any secrets that this reusable workflow needs to inherit from the parent workflow
+
+    deploy-mock-staging:
+        needs: build-and-test
+        uses: TomSmithCoding/test_github_actions/.github/workflows/deploy-to-environment-reusable.yml@main
+        with:
+            environment-name: STAGING
+            artifact-name: pythonproject-build
+        #secrets: inherit # Can specify any secrets that this reusable workflow needs to inherit from the parent workflow
+                    
+    deploy-mock-production:
+        needs: 
+            - deploy-mock-dev
+            - deploy-mock-staging
+        uses: TomSmithCoding/test_github_actions/.github/workflows/deploy-to-environment-reusable.yml@main
+        with:
+            environment-name: PROD
+            artifact-name: pythonproject-build
+        #secrets: inherit # Can specify any secrets that this reusable workflow needs to inherit from the parent workflow
+        
