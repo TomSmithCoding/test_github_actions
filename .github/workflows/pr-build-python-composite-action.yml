@@ -1,0 +1,24 @@
+name: PR Build Python
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Before composite action
+        run: echo "This is a step before the composite action."
+
+      - name: Build and Test Python Project
+        uses: TomSmithCoding/python-build-test-custom-action@main
+        with:
+          python-version: "3.x"
+          output-path: "src"
+          
+      - name: After composite action
+        run: echo "This is a step after the composite action."
