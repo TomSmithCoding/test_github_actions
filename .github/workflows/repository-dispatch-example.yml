@@ -1,0 +1,19 @@
+name: Repository Dispatch Example
+on:
+  repository_dispatch:
+    types: [on-demand-test-event]
+
+jobs:
+    get-info-from-event:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get info from event
+              run: |
+                echo "Repository dispatch event received!"
+                echo "$GITHUB_CONTEXT"
+
+            - name: Send greeting
+              run: |
+                echo "Hello, ${{ github.event.client_payload.value1 }}!"
+                echo "and Hello there ${{ github.event.client_payload.value2 }}."
+                echo "Oh hello there ${{ github.event.client_payload.value3 }}"
