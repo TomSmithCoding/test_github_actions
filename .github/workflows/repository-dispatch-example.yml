@@ -8,6 +8,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Get info from event
+              env:
+                GITHUB_CONTEXT: ${{ toJson(github) }}
               run: |
                 echo "Repository dispatch event received!"
                 echo "$GITHUB_CONTEXT"
