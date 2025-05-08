@@ -10,6 +10,10 @@ permissions: # Permissions for OIDC
     id-token: write
     contents: read
 
+concurrency:
+    group: push-default-and-deploy-reusable-workflows-${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
     build-and-test:
         runs-on: ubuntu-latest
